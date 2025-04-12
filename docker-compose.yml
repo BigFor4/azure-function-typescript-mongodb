@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  azure-function-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7071:80"
+      - "2222:2222"
+    environment:
+      AzureWebJobsScriptRoot: /home/site/wwwroot
+      AzureFunctionsJobHost__Logging__Console__IsEnabled: true
+    volumes:
+      - .:/home/site/wwwroot
