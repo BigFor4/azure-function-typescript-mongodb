@@ -5,8 +5,7 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 export async function convertXml(req: any, context: any): Promise<any> {
-    const key: string | undefined = req.query.key || req.body?.key;
-
+    const key: string | undefined = req.query?.key || req.body?.key;
     if (!key) {
         return {
             status: 400,
@@ -15,7 +14,6 @@ export async function convertXml(req: any, context: any): Promise<any> {
         ;
     }
 
-    // Kiểm tra các biến môi trường
     const mongoUri = process.env.MONGO_URI;
     const mongoDbName = process.env.MONGO_DB_NAME;
     const mongoCollection = process.env.MONGO_COLLECTION;
@@ -32,18 +30,15 @@ export async function convertXml(req: any, context: any): Promise<any> {
     let mongoClient: MongoClient | null = null;
 
     try {
-        // Connect to MongoDB
         mongoClient = new MongoClient(mongoUri);
         await mongoClient.connect();
         const db = mongoClient.db(mongoDbName);
         const collection = db.collection(mongoCollection);
 
-        // Connect to Blob Storage
         const blobServiceClient = BlobServiceClient.fromConnectionString(storageConnectionString);
         const containerClient = blobServiceClient.getContainerClient(blobContainerName);
         const blobClient = containerClient.getBlobClient(key);
 
-        // Kiểm tra nếu blob không tồn tại
         const exists = await blobClient.exists();
         if (!exists) {
             return {

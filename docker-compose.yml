@@ -11,5 +11,7 @@ services:
     environment:
       AzureWebJobsScriptRoot: /home/site/wwwroot
       AzureFunctionsJobHost__Logging__Console__IsEnabled: true
+      WEBSITES_INCLUDE_CLOUD_CERTS: true
+      AZURE_FUNCTIONS_ENVIRONMENT: Development
     volumes:
       - .:/home/site/wwwroot
